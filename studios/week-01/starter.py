@@ -11,6 +11,7 @@ Task 2 (first contact) lives at the bottom as a sketch — you run it in your ow
 script and write ``first_contact.md``. Prompts are in ``prompts.json``.
 """
 import re
+import random
 
 from eliza import RULES, FALLBACK, REFLECT, reflect, respond
 
@@ -27,12 +28,12 @@ def new_rules():
     - must not duplicate a pattern already in ``eliza.RULES``,
     - must each actually trigger on *some* input (no pattern that matches the
       empty string — that would just shadow the fallback for everything).
-
-    Example (delete it and write your own):
-        (r"\\bI want (.*)", ["What would it mean to you to get {0}?"])
     """
-    # TODO: return a list of >= 3 (pattern, [templates]) tuples.
-    raise NotImplementedError
+    return [
+        (r"\bI want (.*)", ["What would it mean to you to get {0}?", "Why do you want {0}?"]),
+        (r"\bI think (.*)", ["What makes you think {0}?", "Do you doubt that {0}?"]),
+        (r"\bmy friend (.*)", ["Tell me more about your friend {0}.", "How does your friend {0} affect you?"]),
+    ]
 
 
 # ---- Task 1b — the extended responder ---------------------------------------
@@ -43,9 +44,13 @@ def extended_respond(text):
     ``eliza.reflect`` for the pronoun swap — do not reinvent it. The shortest
     correct body is ``eliza.respond``'s loop run over ``RULES + new_rules()``.
     """
-    # TODO: loop over RULES + new_rules(); on first regex match, reflect the
-    #       groups and format a random template; else fall back.
-    raise NotImplementedError
+    all_rules = RULES + new_rules()
+    for pattern, templates in all_rules:
+        m = re.search(pattern, text, re.IGNORECASE)
+        if m:
+            groups = [reflect(g) for g in m.groups()]
+            return random.choice(templates).format(*groups)
+    return random.choice(FALLBACK)
 
 
 # ---- Task 1c — declare your deliberate failure ------------------------------
@@ -63,8 +68,9 @@ def failure_case():
     into your ``eliza.py`` docstring for the commit the plan asks for
     (``week01/eliza.py`` with the failure documented).
     """
-    # TODO: return (input_text, why_it_fails)
-    raise NotImplementedError
+    input_text = "My dog is very smart and my cat is lazy"
+    why_it_fails = "ELIZA matches the 'my ...' pattern on the first clause and completely ignores the second clause due to first-match-wins evaluation."
+    return (input_text, why_it_fails)
 
 
 # ---- Task 2 sketch — first contact (see README §"Task 2") -------------------
