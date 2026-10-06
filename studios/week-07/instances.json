@@ -1,0 +1,35 @@
+{
+  "_comment": "Instance bank for the week-7 studio. Values are taken VERBATIM from week-07-dpll-sat.ipynb. No randomness, no seed: propositional instances are exact, not sampled. CNFs use the DIMACS int convention (positive n = variable n, negative = its negation); here P=1, Q=2, R=3.",
+  "example_cnf": {
+    "modus_ponens": {
+      "kb": [[-1, 2], [1]],
+      "note": "{P->Q, P} entails Q; does not entail ¬Q"
+    },
+    "affirming_consequent": {
+      "kb": [[-1, 2], [2]],
+      "note": "{P->Q, Q} does NOT entail P -- the warm-up poll fallacy"
+    }
+  },
+  "wumpus": {
+    "N": 4,
+    "base_percepts": [
+      {"sq": [1, 1], "pit": false, "breeze": false},
+      {"sq": [2, 1], "pit": false, "breeze": true}
+    ],
+    "extra_percept": [
+      {"sq": [1, 2], "breeze": false}
+    ],
+    "frontier": [[1, 2], [2, 2], [3, 1], [1, 3]],
+    "expected_base": {
+      "1,2": "SAFE (proved)",
+      "2,2": "UNKNOWN",
+      "3,1": "UNKNOWN",
+      "1,3": "UNKNOWN"
+    },
+    "expected_after_extra": {
+      "2,2": "SAFE (proved)",
+      "3,1": "PIT (proved)",
+      "1,3": "SAFE (proved)"
+    }
+  }
+}
